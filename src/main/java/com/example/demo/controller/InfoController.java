@@ -16,13 +16,11 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSONPObject;
 import com.example.demo.entity.Saler;
 import com.example.demo.service.InfoService;
 
@@ -42,34 +40,34 @@ public class InfoController {
 	private InfoService infoService;
 	
 	@RequestMapping("/")
+	@ResponseBody
 	public String test1() {
 		return "/SalerInfo";
 	}
 	
 	@RequestMapping("/modify")
 	@ResponseBody
-	public String modify(String callback,HttpServletRequest request) {
-		Map<String, String[]> req = request.getParameterMap();
-		System.out.println(req.get("id")[0]+" "+
-				req.get("name")[0]+" "+
-				req.get("password")[0]+" "+
-				req.get("tele")[0]+" "+
-				req.get("email")[0]+" "+
-				req.get("address")[0]+" "+
-				req.get("signature")[0]);
+	public String modify(@RequestBody Map<String, String> req) {
+		System.out.println(req.get("id")+" "+
+				req.get("name")+" "+
+				req.get("password")+" "+
+				req.get("tele")+" "+
+				req.get("email")+" "+
+				req.get("address")+" "+
+				req.get("signature"));
 		infoService.saveInfo(
-				req.get("id")[0],
-				req.get("name")[0],
-				req.get("password")[0],
-				req.get("tele")[0],
-				req.get("email")[0],
-				req.get("address")[0],
-				req.get("signature")[0]
+				req.get("id"),
+				req.get("name"),
+				req.get("password"),
+				req.get("tele"),
+				req.get("email"),
+				req.get("address"),
+				req.get("signature")
 				);
-		if(req.get("img")!=null) {
-		String imgStr = req.get("img")[0];
+		if(req.get("img")!=null&&req.get("img").length()>1000) {
+		String imgStr = req.get("img");
 		System.out.println("base64:"+imgStr);
-		String path = "C:\\pc\\workspace\\oldneighborhood-validate\\src\\main\\resources\\img\\"+req.get("id")[0]+".jpg";
+		String path = "C:\\pc\\workspace\\oldneighborhood-validate\\src\\main\\resources\\img\\"+req.get("id")+".jpg";
 		imgStr = imgStr.replaceAll("data:image/jpeg;base64,", ""); 
 		BASE64Decoder decoder = new BASE64Decoder();
 		try {
@@ -92,18 +90,15 @@ public class InfoController {
 			} catch (Exception e) {
 			}
 		}
-		return "success" ;
+		return "{\"result\":\"success\"}" ;
 	}
 	
 	@RequestMapping("/info")
 	@ResponseBody
-	public Object getInfo(String callback,String key) {
-		Saler saler = infoService.getInfo(key);
+	public Object getInfo(String s_ID) {
+		System.out.println(s_ID);
+		Saler saler = infoService.getInfo(s_ID);
 		System.out.println(saler.getS_date()+" "+saler.getS_password());
-		JSONPObject jsonpObject = new JSONPObject();
-		jsonpObject.setFunction(callback);
-		jsonpObject.addParameter(saler);
-		
-		return jsonpObject ;
+		return saler;
 	}
 }
