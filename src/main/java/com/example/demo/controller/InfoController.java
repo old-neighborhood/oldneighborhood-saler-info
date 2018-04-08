@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.demo.entity.Saler;
 import com.example.demo.service.InfoService;
+import com.example.demo.service.TestService;
 
 import sun.misc.BASE64Decoder;
 
@@ -38,11 +39,12 @@ import sun.misc.BASE64Decoder;
 public class InfoController {
 	@Resource
 	private InfoService infoService;
-	
+	@Resource
+	TestService testService;
 	@RequestMapping("/")
 	@ResponseBody
 	public String test1() {
-		return "/SalerInfo";
+		return testService.getID();
 	}
 	
 	@RequestMapping("/modify")
@@ -67,7 +69,7 @@ public class InfoController {
 		if(req.get("img")!=null&&req.get("img").length()>1000) {
 		String imgStr = req.get("img");
 		System.out.println("base64:"+imgStr);
-		String path = "C:\\pc\\workspace\\oldneighborhood-validate\\src\\main\\resources\\img\\"+req.get("id")+".jpg";
+		String path = "C:\\pc\\workspace\\oldneighborhood-frontUI\\src\\main\\resources\\img\\"+req.get("id")+".jpg";
 		imgStr = imgStr.replaceAll("data:image/jpeg;base64,", ""); 
 		BASE64Decoder decoder = new BASE64Decoder();
 		try {
@@ -95,8 +97,7 @@ public class InfoController {
 	
 	@RequestMapping("/info")
 	@ResponseBody
-	public Object getInfo(String s_ID) {
-		System.out.println(s_ID);
+	public Object getInfo(@RequestBody String s_ID) {
 		Saler saler = infoService.getInfo(s_ID);
 		System.out.println(saler.getS_date()+" "+saler.getS_password());
 		return saler;

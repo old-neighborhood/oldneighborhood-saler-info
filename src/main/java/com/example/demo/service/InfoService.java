@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+
 import com.example.demo.entity.Saler;
+
 
 public interface InfoService {
 	public Saler getInfo(String key);
@@ -14,4 +16,5 @@ public interface InfoService {
 			String s_address,
 			String s_signature
 			);
+	
 }
