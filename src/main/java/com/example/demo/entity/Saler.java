@@ -104,7 +104,6 @@ public class Saler implements Serializable {
 	@NonNull
 	private String s_tele;
 	private String s_email;
-	@NonNull
 	private String s_address;
 	@NonNull
 	private String s_signature;

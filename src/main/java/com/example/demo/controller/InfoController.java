@@ -99,7 +99,6 @@ public class InfoController {
 	@ResponseBody
 	public Object getInfo(@RequestBody String s_ID) {
 		Saler saler = infoService.getInfo(s_ID);
-		System.out.println(saler.getS_date()+" "+saler.getS_password());
 		return saler;
 	}
 }
